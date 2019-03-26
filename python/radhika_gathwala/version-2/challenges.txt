@@ -1,0 +1,6 @@
+Challenges - v2
+
+The main challenge that I had in completing this version of the project included checking for string equality in the vendor titles. I wasn't sure on how to approach the problem for an example, PAYLESS SHOES12345   FLAGSTAFF and PAYLESS SHOESO00048348   FLAGSTAFF     AZ were supposed to be considered as the same entry, or key in the dictionary. 
+
+Even after looking at the file for hours, I still did not get the food and entertainment totals right, causing the WARNING-NOT-CATEGORY category to also be incorrect. In my code, I have accommodated for hyphens and commas and the best technique I could come up with for string equality was comparing the first word. I also changed each vendor to lower case. 
+

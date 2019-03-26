@@ -1,0 +1,73 @@
+#Import csv and dictionary libraries
+import csv
+from collections import defaultdict
+
+#open and read in the input file
+inputFile = open('input.v2.csv')
+inputReader = list(csv.reader(inputFile))
+vendors= {} #create vendors dictionary to map each vendor to a category
+categoryTotal= {} #create a categoryTotal dictionary to add up the amounts
+
+#go through each line in the inputReader
+for line in inputReader[1:]:
+    #manipulate each vendor so that it's easy to compare different vendors, getting rid of  - or commas and also making the string lowercase
+    vendor = line[2].replace('-',' ').replace(',',' ').lower()
+    #we split each vendor so that we can compare the first "word"
+    vendor = vendor.split()
+    #if the first word in not in the dictionary already we add it.
+    if vendor[0] not in vendors:
+        vendors[vendor[0]] = line[5]
+    else:
+    #we also check to make sure a category isn't added more than once
+        if line[5] not in vendors[vendor[0]]:
+            vendors[vendor[0]] += line[5]
+
+#go through each line in the inputReader
+for line in inputReader[1:]:
+    category = line[5]
+    vendor = line[2].replace('-',' ').replace(',',' ').lower()
+    vendor = vendor.split()
+    if category == '':
+        category = vendors[vendor[0]]
+    else:
+        category = line[5]
+    if category not in categoryTotal:
+	#replaces '$', ',', and ')' with '' --> gets rid of the symbols so we can perform arithmetic operations
+        amt = line[1].replace('($','').replace('$','').replace(',','').replace(')','')
+        line[1].split()
+        if '(' in line[1]: #subtracts amount
+	    #this labels the entries with no category
+            if category == '':
+                category = 'WARNING-NO-CATEGORY'
+            categoryTotal[category] = (-1)* float(amt)
+        else:    #adds amount
+	    #this labels the entries with no category
+            if category == '':
+                category = 'WARNING-NO-CATEGORY'
+            categoryTotal[category] = float(amt)
+    else: #adds to existing dictionary entry
+        amt = line[1].replace('($','').replace('$','').replace(',','').replace(')','')
+        if '(' in line[1]:
+            categoryTotal[category] -= float(amt)
+        else:
+            categoryTotal[category] += float(amt)
+
+#prints out the vendors dictionary
+for j,m in vendors.items():
+   print(j, ': ', m)
+
+#prints out the categoryTotal dictionary    
+for i,k in categoryTotal.items():
+    if k < 0:
+        categoryTotal[i] = '($' + str(-1*k) + ')'
+    else:
+        categoryTotal[i] = '$' + str(k)
+    print(i, ': ', k)
+
+
+#write to csvFile output file
+csvFileObj = open("v2.output-radhika.csv",'w')
+csvWriter = csv.writer(csvFileObj)
+csvWriter.writerow(categoryTotal.keys())
+csvWriter.writerow(categoryTotal.values())
+csvFileObj.close()

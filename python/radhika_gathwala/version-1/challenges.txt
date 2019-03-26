@@ -1,0 +1,5 @@
+Challenges - v1
+
+The main challenge that I had in completing this project involved accommodating for the variations of the amount value. First, I had to get rid of the $ sign and then I ran into a comma. After that, I figured out that the parenthesis meant that we had to subtract the amount in that case.
+
+I think in general figuring how to execute my logic to manipulate the data was difficult. It didn't take me too long to find out my solution of creating a dictionary to store entries of the same name, making it easier to add up the amount. But implementing my algorithm was somewhat tricky especially with the different cases.

@@ -1,0 +1,44 @@
+#Import csv and dictionary libraries
+import csv
+from collections import defaultdict
+
+#open and read in the input file
+inputFile = open('input.v1.csv')
+inputReader = list(csv.reader(inputFile))
+inputData = {} #create inputData dictionary to store the values of items from the same category
+
+
+#go through each line in the inputReader
+for line in inputReader[1:]:
+    #if the key (line[5] or the category) doesn't exist in the dictionary inputData we add it
+    if line[5] not in inputData:
+	#replaces '$', ',', and ')' with '' --> gets rid of the symbols so we can perform arithmetic operations
+        amt = line[1].replace('($','').replace('$','').replace(',','').replace(')','')
+	#checks if the amount is in parenthesis --> we need to subtract the amount in that case so we multiply by -1
+        if '(' in line[1]:
+            inputData[line[5]] = (-1)* float(amt)
+        else:
+            inputData[line[5]] = float(amt)
+    else: #if the key (line[5] or the category) already exists in the dictionary inputData, we append the total in that category
+	#replaces '$', ',', and ')' with '' --> gets rid of the symbols so we can perform arithmetic operations
+        amt = line[1].replace('($','').replace('$','').replace(',','').replace(')','')
+        #checks if the amount is in parenthesis --> we need to subtract the amount in that case so we multiply by -1
+	if '(' in line[1]:
+            inputData[line[5]] -= float(amt)
+        else:
+            inputData[line[5]] += float(amt)
+
+#prints out the categories
+for i,k in inputData.items():
+    if k < 0:
+        inputData[i] = '($' + str(-1*k) + ')'
+    else:
+        inputData[i] = '$' + str(k)
+    print(i, ': ', k)
+
+#write to csvFile output file
+csvFileObj = open("v1.output-radhika.csv",'w')
+csvWriter = csv.writer(csvFileObj)
+csvWriter.writerow(inputData.keys())
+csvWriter.writerow(inputData.values())
+csvFileObj.close()
